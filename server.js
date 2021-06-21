@@ -2,7 +2,7 @@ const express = require('express')
 const exphbs = require('express-handlebars');
 const app = express()
 const port = 3000
-const Post = require
+require('./controllers/posts')(app);
 
 
 app.engine('handlebars', exphbs());
@@ -24,3 +24,8 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Set db
+require('./data/reddit-db');
