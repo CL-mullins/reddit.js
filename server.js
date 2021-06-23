@@ -8,8 +8,26 @@ require('./controllers/posts')(app);
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Set db
+require('./data/reddit-db');
+
+// Middlewear above
+
+const Post = require('./models/post');
+
+//////////////////////////////////
+//         Routes               //
+//////////////////////////////////
+
 app.get('/', (req, res) => {
-  res.render('home')
+  Post.find({}).lean()
+    .then((posts) => res.render('posts-index', { posts }))
+    .catch((err) => {
+      console.log(err.message);
+    })
 })
 
 app.get('/posts/new', (req, res) => {
@@ -24,8 +42,4 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
-// Set db
-require('./data/reddit-db');
