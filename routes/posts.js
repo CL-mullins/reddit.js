@@ -25,7 +25,10 @@ module.exports = (app) => {
     if (req.user) {
       const userId = req.user._id;
       const post = new Post(req.body);
-      post.author = userId;
+      post.author = req.user._id;
+      post.upVotes = [];
+      post.downVotes = [];
+      post.voteScore = 0;
 
       post
         .save()
@@ -62,5 +65,26 @@ module.exports = (app) => {
       .catch((err) => {
         console.log(err);
       });
+  });
+
+  // VOTING
+  app.put('/posts/:id/vote-up', (req, res) => {
+    Post.findById(req.params.id).then((err, post) => {
+      post.upVotes.push(req.user._id);
+      post.voteScore += 1;
+      post.save();
+  
+      return res.status(200);
+    });
+  });
+  
+  app.put('/posts/:id/vote-down', (req, res) => {
+    Post.findById(req.params.id).then((err, post) => {
+      post.downVotes.push(req.user._id);
+      post.voteScore -= 1;
+      post.save();
+  
+      return res.status(200);
+    });
   });
 };
