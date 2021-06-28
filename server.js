@@ -29,6 +29,7 @@ const checkAuth = require('./middleware/checkAuth');
 require('./routes/posts')(app);
 require('./routes/comments.js')(app);
 require('./routes/auth.js')(app);
+require('./routes/replies.js')(app);
 
 app.use(checkAuth);
 
