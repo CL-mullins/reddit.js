@@ -1,3 +1,5 @@
+const dotenv = require('dotenv').config();
+const cookieParser = require('cookie-parser');
 const express = require('express')
 const exphbs = require('express-handlebars');
 const app = express()
@@ -11,6 +13,9 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// COOKIE PARSER
+app.use(cookieParser());
+
 // DATABASE
 require('./data/reddit-db');
 
@@ -18,6 +23,7 @@ require('./data/reddit-db');
 
 require('./routes/posts')(app);
 require('./routes/comments.js')(app);
+require('./routes/auth.js')(app);
 
 
 app.listen(port, () => {
