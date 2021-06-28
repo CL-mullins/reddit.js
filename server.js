@@ -17,6 +17,7 @@ require('./data/reddit-db');
 
 
 require('./routes/posts')(app);
+require('./routes/comments.js')(app);
 
 
 app.listen(port, () => {
