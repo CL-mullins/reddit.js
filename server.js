@@ -10,8 +10,11 @@ const port = 3000
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 
 // COOKIE PARSER
 app.use(cookieParser());
@@ -20,11 +23,14 @@ app.use(cookieParser());
 require('./data/reddit-db');
 
 
+const checkAuth = require('./middleware/checkAuth');
+
 
 require('./routes/posts')(app);
 require('./routes/comments.js')(app);
 require('./routes/auth.js')(app);
 
+app.use(checkAuth);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
